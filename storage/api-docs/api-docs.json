@@ -1,0 +1,518 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API CAMWATER PRO",
+        "description": "Documentation de l' api CAMWATER PRO (Abonnés,Factures,Reclammations)",
+        "contact": {
+            "email": "support@camwaterpro.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Serveur Local"
+        }
+    ],
+    "paths": {
+        "/api/abonnes": {
+            "get": {
+                "tags": [
+                    "Abonnes"
+                ],
+                "summary": "Lister tous les abonnés",
+                "operationId": "506006ca910658b7ec4a12fd3ae4ea9b",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre d'éléments par page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    },
+                    {
+                        "name": "ville",
+                        "in": "query",
+                        "description": "Filtrer par ville",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "typeAbonnement",
+                        "in": "query",
+                        "description": "Filtrer par type d'abonnement",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Recherche par nom ou prénom",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Abonnes"
+                ],
+                "summary": "Créer un nouvel abonné",
+                "operationId": "43b33365129f98431521c3428e514f8d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nom",
+                                    "prenom",
+                                    "ville",
+                                    "quartier",
+                                    "numeroCompteur",
+                                    "typeAbonnement"
+                                ],
+                                "properties": {
+                                    "nom": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "prenom": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "ville": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Yaoundé",
+                                            "Douala",
+                                            "Bafoussam",
+                                            "Garoua"
+                                        ]
+                                    },
+                                    "quartier": {
+                                        "type": "string",
+                                        "example": "Etoudi"
+                                    },
+                                    "numeroCompteur": {
+                                        "type": "string",
+                                        "example": "CPT1234"
+                                    },
+                                    "typeAbonnement": {
+                                        "type": "string",
+                                        "enum": [
+                                            "DOMESTIQUE",
+                                            "PROFESSIONNEL"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/abonnes/{id}": {
+            "get": {
+                "tags": [
+                    "Abonnes"
+                ],
+                "summary": "Afficher un abonné",
+                "operationId": "dc65bc663d089dd07bd94079588b9f13",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'abonné",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "404": {
+                        "description": "Abonné introuvable"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Abonnes"
+                ],
+                "summary": "Modifier un abonné",
+                "operationId": "7f055eef194e064fa8837a2654313001",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'abonné",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nom": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "prenom": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "ville": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Yaoundé",
+                                            "Douala",
+                                            "Bafoussam",
+                                            "Garoua"
+                                        ]
+                                    },
+                                    "quartier": {
+                                        "type": "string",
+                                        "example": "Etoudi"
+                                    },
+                                    "typeAbonnement": {
+                                        "type": "string",
+                                        "enum": [
+                                            "DOMESTIQUE",
+                                            "PROFESSIONNEL"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "404": {
+                        "description": "Abonné introuvable"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Abonnes"
+                ],
+                "summary": "Supprimer un abonné",
+                "operationId": "391210eca394d7cc7d087eaf2b7e8528",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'abonné",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "404": {
+                        "description": "Abonné introuvable"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Se connecter",
+                "description": "Authentifie l'utilisateur et retourne les tokens d'accès et de rafraîchissement.",
+                "operationId": "dd51a484b7fa0f97c7680fdbde14cf5f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Se déconnecter",
+                "description": "Révoque le token d'accès actuel.",
+                "operationId": "df9bdc6c7a6d9f20b983526b2ec0f698",
+                "responses": {
+                    "200": {
+                        "description": "Déconnexion réussie"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Rafraîchir les tokens",
+                "description": "Révoque tous les tokens actuels et en génère de nouveaux. Nécessite un token avec l'habileté 'refresh'.",
+                "operationId": "30c20c52f5f72828d8c531fd7c9ea3e7",
+                "responses": {
+                    "200": {
+                        "description": "Tokens rafraîchis"
+                    },
+                    "401": {
+                        "description": "Non authentifié ou token invalide"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/factures": {
+            "get": {
+                "tags": [
+                    "Factures"
+                ],
+                "summary": "Lister toutes les factures",
+                "operationId": "99d06787048494132f2851382f5fe4dc",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre d'éléments par page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    },
+                    {
+                        "name": "abonneId",
+                        "in": "query",
+                        "description": "Filtrer par ID d'abonné",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "statut",
+                        "in": "query",
+                        "description": "Filtrer par statut (Payé, Impayé, etc.)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dateEmission",
+                        "in": "query",
+                        "description": "Filtrer par date d'émission",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/factures/generer": {
+            "post": {
+                "tags": [
+                    "Factures"
+                ],
+                "summary": "Générer une facture pour un abonné",
+                "operationId": "22d63e181b8890823d2c621645ef19af",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "abonneId",
+                                    "consommation"
+                                ],
+                                "properties": {
+                                    "abonneId": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "consommation": {
+                                        "type": "integer",
+                                        "example": 100
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Succès"
+                    },
+                    "404": {
+                        "description": "Pas trouvé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/api/factures/{id}": {
+            "get": {
+                "tags": [
+                    "Factures"
+                ],
+                "summary": "Consulter une facture",
+                "operationId": "b0853e33b40f0b126277ef244a95be18",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la facture",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succès"
+                    },
+                    "404": {
+                        "description": "Facture introuvable"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Abonnes",
+            "description": "Abonnes"
+        },
+        {
+            "name": "Authentification",
+            "description": "Authentification"
+        },
+        {
+            "name": "Factures",
+            "description": "Factures"
+        }
+    ]
+}
