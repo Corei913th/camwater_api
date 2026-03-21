@@ -141,4 +141,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/camwater-app:latest,${{ secrets.DOCKERHUB_USERNAME }}/camwater-app:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest,${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:${{ github.sha }}
