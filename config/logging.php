@@ -179,6 +179,17 @@ return [
             'days' => 7,
         ],
 
+        'json' => [
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'handler' => StreamHandler::class,
+            'formatter' => \Monolog\Formatter\JsonFormatter::class,
+            'handler_with' => [
+                'stream' => 'php://stderr',
+            ],
+            'processors' => [PsrLogMessageProcessor::class],
+        ],
+
     ],
 
 ];
