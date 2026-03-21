@@ -1,9 +1,7 @@
 <?php
 
-
 use App\Http\Controllers\Api\FactureController;
 use Illuminate\Support\Facades\Route;
-
 
 // Factures
 Route::get('/factures', [FactureController::class, 'index']);

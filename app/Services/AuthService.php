@@ -5,16 +5,14 @@ namespace App\Services;
 use App\Constants\TokenConstants;
 use App\Models\Utilisateur;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
 
 /**
- * Service d' authentification 
+ * Service d' authentification
  */
 class AuthService
 {
-
     public function __construct() {}
 
     /**
@@ -44,7 +42,6 @@ class AuthService
         ];
     }
 
-
     public function login(array $credentials): array
     {
         $user = $this->verifyUserCredentials($credentials['email'], $credentials['password']);
@@ -54,26 +51,24 @@ class AuthService
 
     /**
      * Vérifier les credentials d'un utilisateur
-     * 
-     * @param string $email Email de l' user
-     * @param string $password Mot de passe
-     * @return Utilisateur
+     *
+     * @param  string  $email  Email de l' user
+     * @param  string  $password  Mot de passe
+     *
      * @throws ValidationException
      */
-    public  function verifyUserCredentials(string $email, string $password): Utilisateur
+    public function verifyUserCredentials(string $email, string $password): Utilisateur
     {
         $utilisateur = Utilisateur::where('email', $email)->first();
 
-        if (!$utilisateur || !Hash::check($password, $utilisateur->password)) {
+        if (! $utilisateur || ! Hash::check($password, $utilisateur->password)) {
             throw ValidationException::withMessages([
                 'email' => ['Les identifiants fournis sont incorrects.'],
             ]);
         }
 
-
         return $utilisateur;
     }
-
 
     /**
      * Refresh tokens using a refresh token.

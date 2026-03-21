@@ -4,12 +4,10 @@ use App\Helpers\DatabaseHelper;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 
-if (!function_exists('runTransaction')) {
+if (! function_exists('runTransaction')) {
     /**
      * Exécuter une opération dans une transaction
-     * 
-     * @param callable $callback
-     * @param string|null $context
+     *
      * @return mixed
      */
     function runTransaction(callable $callback, ?string $context = null)
@@ -18,18 +16,13 @@ if (!function_exists('runTransaction')) {
     }
 }
 
-
-
-if (!function_exists('api_success')) {
+if (! function_exists('api_success')) {
     /**
      * Crée une réponse API standardisée pour un succès.
      *
-     * @param mixed $data Les données à retourner (optionnel, peut être un Resource, collection ou tableau)
-     * @param string|null $message Message de succès (optionnel)
-     * @param int $code Code HTTP (par défaut 200)
-     *
-     * @return JsonResponse
-     *
+     * @param  mixed  $data  Les données à retourner (optionnel, peut être un Resource, collection ou tableau)
+     * @param  string|null  $message  Message de succès (optionnel)
+     * @param  int  $code  Code HTTP (par défaut 200)
      */
     function api_success(mixed $data = null, ?string $message = null, int $code = 200): JsonResponse
     {
@@ -37,15 +30,13 @@ if (!function_exists('api_success')) {
     }
 }
 
-if (!function_exists('api_error')) {
+if (! function_exists('api_error')) {
     /**
      * Crée une réponse API standardisée pour une erreur.
      *
-     * @param string $message Message d'erreur
-     * @param mixed $errors Détails additionnels ou erreurs de validation (optionnel)
-     * @param int $code Code HTTP (par défaut 400)
-     *
-     * @return JsonResponse
+     * @param  string  $message  Message d'erreur
+     * @param  mixed  $errors  Détails additionnels ou erreurs de validation (optionnel)
+     * @param  int  $code  Code HTTP (par défaut 400)
      *
      * @example
      * return api_error('Entrée invalide', ['email' => 'Email requis'], 422);
@@ -56,15 +47,12 @@ if (!function_exists('api_error')) {
     }
 }
 
-if (!function_exists('api_created')) {
+if (! function_exists('api_created')) {
     /**
      * Crée une réponse standardisée après la création d'une ressource.
      *
-     * @param mixed $data La ressource créée (optionnel)
-     * @param string $message Message de succès (par défaut "Ressource créée avec succès")
-     *
-     * @return JsonResponse
-     *
+     * @param  mixed  $data  La ressource créée (optionnel)
+     * @param  string  $message  Message de succès (par défaut "Ressource créée avec succès")
      */
     function api_created(mixed $data = null, string $message = 'Ressource créée avec succès'): JsonResponse
     {
@@ -72,14 +60,12 @@ if (!function_exists('api_created')) {
     }
 }
 
-if (!function_exists('api_updated')) {
+if (! function_exists('api_updated')) {
     /**
      * Crée une réponse standardisée après la mise à jour d'une ressource.
      *
-     * @param mixed $data La ressource mise à jour (optionnel)
-     * @param string $message Message de succès (par défaut "Ressource mise à jour avec succès")
-     *
-     * @return JsonResponse
+     * @param  mixed  $data  La ressource mise à jour (optionnel)
+     * @param  string  $message  Message de succès (par défaut "Ressource mise à jour avec succès")
      */
     function api_updated(mixed $data = null, string $message = 'Ressource mise à jour avec succès'): JsonResponse
     {
@@ -87,13 +73,11 @@ if (!function_exists('api_updated')) {
     }
 }
 
-if (!function_exists('api_deleted')) {
+if (! function_exists('api_deleted')) {
     /**
      * Crée une réponse standardisée après la suppression d'une ressource.
      *
-     * @param string $message Message de succès (par défaut "Ressource supprimée avec succès")
-     *
-     * @return JsonResponse
+     * @param  string  $message  Message de succès (par défaut "Ressource supprimée avec succès")
      *
      * @example
      * return api_deleted();
@@ -104,14 +88,11 @@ if (!function_exists('api_deleted')) {
     }
 }
 
-if (!function_exists('api_not_found')) {
+if (! function_exists('api_not_found')) {
     /**
      * Crée une réponse standardisée 404 Not Found.
      *
-     * @param string $message Message d'erreur (par défaut "Ressource non trouvée")
-     *
-     * @return JsonResponse
-     *
+     * @param  string  $message  Message d'erreur (par défaut "Ressource non trouvée")
      */
     function api_not_found(string $message = 'Ressource non trouvée'): JsonResponse
     {
@@ -119,13 +100,11 @@ if (!function_exists('api_not_found')) {
     }
 }
 
-if (!function_exists('api_unauthorized')) {
+if (! function_exists('api_unauthorized')) {
     /**
      * Crée une réponse standardisée 401 Unauthorized.
      *
-     * @param string $message Message d'erreur (par défaut "Non autorisé")
-     *
-     * @return JsonResponse
+     * @param  string  $message  Message d'erreur (par défaut "Non autorisé")
      *
      * @example
      * return api_unauthorized('Authentification requise');
@@ -136,13 +115,11 @@ if (!function_exists('api_unauthorized')) {
     }
 }
 
-if (!function_exists('api_forbidden')) {
+if (! function_exists('api_forbidden')) {
     /**
      * Crée une réponse standardisée 403 Forbidden.
      *
-     * @param string $message Message d'erreur (par défaut "Accès interdit")
-     *
-     * @return JsonResponse
+     * @param  string  $message  Message d'erreur (par défaut "Accès interdit")
      *
      * @example
      * return api_forbidden('Permissions insuffisantes');
@@ -153,14 +130,12 @@ if (!function_exists('api_forbidden')) {
     }
 }
 
-if (!function_exists('api_validation_error')) {
+if (! function_exists('api_validation_error')) {
     /**
      * Crée une réponse standardisée pour les erreurs de validation.
      *
-     * @param mixed $errors Erreurs de validation (tableau ou objet)
-     * @param string $message Message d'erreur (par défaut "Erreur de validation")
-     *
-     * @return JsonResponse
+     * @param  mixed  $errors  Erreurs de validation (tableau ou objet)
+     * @param  string  $message  Message d'erreur (par défaut "Erreur de validation")
      *
      * @example
      * return api_validation_error($validator->errors());
@@ -171,15 +146,13 @@ if (!function_exists('api_validation_error')) {
     }
 }
 
-if (!function_exists('api_paginated')) {
+if (! function_exists('api_paginated')) {
     /**
      * Crée une réponse standardisée pour les listes paginées.
      *
-     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $paginatedData Données paginées
-     * @param string|null $message Message de succès (optionnel)
-     * @param string|null $resourceClass Classe de ressource API pour transformer les items (optionnel)
-     *
-     * @return JsonResponse
+     * @param  \Illuminate\Contracts\Pagination\LengthAwarePaginator  $paginatedData  Données paginées
+     * @param  string|null  $message  Message de succès (optionnel)
+     * @param  string|null  $resourceClass  Classe de ressource API pour transformer les items (optionnel)
      *
      * @example
      * $users = User::paginate(10);

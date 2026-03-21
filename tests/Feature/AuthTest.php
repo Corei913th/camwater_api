@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Utilisateur;
 use App\Constants\TokenConstants;
+use App\Models\Utilisateur;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -32,8 +32,8 @@ class AuthTest extends TestCase
                 'data' => [
                     'access_token',
                     'refresh_token',
-                    'token_type'
-                ]
+                    'token_type',
+                ],
             ]);
     }
 
@@ -58,12 +58,12 @@ class AuthTest extends TestCase
     /**
      * Test logout revokes token.
      */
-    public function test_Utilisateur_can_logout(): void
+    public function test_utilisateur_can_logout(): void
     {
         $Utilisateur = Utilisateur::factory()->create();
         $token = $Utilisateur->createToken('test')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->postJson('/api/auth/logout');
 
         $response->assertStatus(200);
@@ -73,13 +73,13 @@ class AuthTest extends TestCase
     /**
      * Test token refresh.
      */
-    public function test_Utilisateur_can_refresh_token(): void
+    public function test_utilisateur_can_refresh_token(): void
     {
         $Utilisateur = Utilisateur::factory()->create();
         // Create a refresh token
         $refreshToken = $Utilisateur->createToken('refresh', [TokenConstants::ABILITY_REFRESH])->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $refreshToken)
+        $response = $this->withHeader('Authorization', 'Bearer '.$refreshToken)
             ->postJson('/api/auth/refresh');
 
         $response->assertStatus(200)
@@ -87,10 +87,9 @@ class AuthTest extends TestCase
                 'success',
                 'data' => [
                     'access_token',
-                    'refresh_token'
-                ]
+                    'refresh_token',
+                ],
             ]);
-
 
         $this->assertCount(2, $Utilisateur->tokens);
     }
@@ -103,10 +102,10 @@ class AuthTest extends TestCase
         $Utilisateur = Utilisateur::factory()->create();
         $accessToken = $Utilisateur->createToken('access', [TokenConstants::ABILITY_ALL])->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $accessToken)
+        $response = $this->withHeader('Authorization', 'Bearer '.$accessToken)
             ->postJson('/api/auth/refresh');
 
         $response->assertStatus(200);
-        //->assertJsonPath('message', 'Ce token n\'est pas autorisé à rafraîchir les accès.');
+        // ->assertJsonPath('message', 'Ce token n\'est pas autorisé à rafraîchir les accès.');
     }
 }

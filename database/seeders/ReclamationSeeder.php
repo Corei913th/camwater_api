@@ -9,16 +9,16 @@ use Illuminate\Database\Seeder;
 
 class ReclamationSeeder extends Seeder
 {
-  use WithoutModelEvents;
+    use WithoutModelEvents;
 
-  public function run(): void
-  {
-    Facture::all()->each(function (Facture $facture) {
-      if (rand(1, 100) <= 40) { // ~40% des factures ont une réclamation
-        Reclamation::factory()
-          ->count(rand(1, 2))
-          ->create(['factureId' => $facture->id]);
-      }
-    });
-  }
+    public function run(): void
+    {
+        Facture::all()->each(function (Facture $facture) {
+            if (rand(1, 100) <= 40) { // ~40% des factures ont une réclamation
+                Reclamation::factory()
+                    ->count(rand(1, 2))
+                    ->create(['factureId' => $facture->id]);
+            }
+        });
+    }
 }

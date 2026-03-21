@@ -8,62 +8,63 @@ use Illuminate\Support\Collection;
 
 class AbonneService
 {
-  public function __construct(private readonly Abonne $model) {}
+    public function __construct(private readonly Abonne $model) {}
 
-  public function findAll(array $filters = [], int $perPage = 15): LengthAwarePaginator
-  {
-    $query = $this->model->newQuery();
+    public function findAll(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    {
+        $query = $this->model->newQuery();
 
-    if (!empty($filters['ville'])) {
-      $query->where('ville', $filters['ville']);
+        if (! empty($filters['ville'])) {
+            $query->where('ville', $filters['ville']);
+        }
+
+        if (! empty($filters['typeAbonnement'])) {
+            $query->where('typeAbonnement', $filters['typeAbonnement']);
+        }
+
+        if (! empty($filters['search'])) {
+            $search = mb_strtolower($filters['search']);
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(nom) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(prenom) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(numeroCompteur) LIKE ?', ["%{$search}%"]);
+            });
+        }
+
+        return $query->latest()->paginate($perPage);
     }
 
-    if (!empty($filters['typeAbonnement'])) {
-      $query->where('typeAbonnement', $filters['typeAbonnement']);
+    public function create(array $data): Abonne
+    {
+        return $this->model->create($data);
     }
 
-    if (!empty($filters['search'])) {
-      $search = mb_strtolower($filters['search']);
-      $query->where(function ($q) use ($search) {
-        $q->whereRaw('LOWER(nom) LIKE ?', ["%{$search}%"])
-          ->orWhereRaw('LOWER(prenom) LIKE ?', ["%{$search}%"])
-          ->orWhereRaw('LOWER(numeroCompteur) LIKE ?', ["%{$search}%"]);
-      });
+    public function finById(int $id): Abonne
+    {
+        return $this->model->findOrFail($id);
     }
 
-    return $query->latest()->paginate($perPage);
-  }
+    public function update(int $id, array $data): Abonne
+    {
+        $abonne = $this->finById($id);
+        $abonne->update($data);
 
-  public function create(array $data): Abonne
-  {
-    return $this->model->create($data);
-  }
+        return $abonne->fresh();
+    }
 
-  public function finById(int $id): Abonne
-  {
-    return $this->model->findOrFail($id);
-  }
+    public function delete(int $id): bool
+    {
+        return $this->finById($id)->delete();
+    }
 
-  public function update(int $id, array $data): Abonne
-  {
-    $abonne = $this->finById($id);
-    $abonne->update($data);
-    return $abonne->fresh();
-  }
-
-  public function delete(int $id): bool
-  {
-    return $this->finById($id)->delete();
-  }
-
-  /**
-   * Statistiques par ville.
-   */
-  public function getStats(): Collection
-  {
-    return $this->model
-      ->selectRaw('ville, COUNT(*) as total, typeAbonnement')
-      ->groupBy('ville', 'typeAbonnement')
-      ->get();
-  }
+    /**
+     * Statistiques par ville.
+     */
+    public function getStats(): Collection
+    {
+        return $this->model
+            ->selectRaw('ville, COUNT(*) as total, typeAbonnement')
+            ->groupBy('ville', 'typeAbonnement')
+            ->get();
+    }
 }

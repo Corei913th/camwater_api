@@ -4,16 +4,14 @@ namespace App\Helpers;
 
 use Illuminate\Http\JsonResponse;
 
-
 class ResponseHelper
 {
     /**
      * Create a standardized success response
      *
-     * @param mixed $data The data to include in the response (optional) - often an API Resource or array
-     * @param string|null $message Success message (optional)
-     * @param int $code HTTP status code (default: 200)
-     *
+     * @param  mixed  $data  The data to include in the response (optional) - often an API Resource or array
+     * @param  string|null  $message  Success message (optional)
+     * @param  int  $code  HTTP status code (default: 200)
      * @return JsonResponse JSON response with success structure
      *
      * @example
@@ -21,14 +19,13 @@ class ResponseHelper
      * $user = User::find(1);
      * return ResponseHelper::success(new \App\Http\Resources\UserResource($user), 'User retrieved successfully');
      * // Returns: {"success": true, "message": "User retrieved successfully", "data": {...}}
-     *
      * @example
      * // Controller usage with collections
      * $concours = Concours::all();
      * return ResponseHelper::success(\App\Http\Resources\ConcoursResource::collection($concours), 'Concours list retrieved');
      * // Returns: {"success": true, "message": "Concours list retrieved", "data": [...]}
      */
-    public static function success($data = null, string $message = null, int $code = 200): JsonResponse
+    public static function success($data = null, ?string $message = null, int $code = 200): JsonResponse
     {
         $response = [
             'success' => true,
@@ -48,10 +45,9 @@ class ResponseHelper
     /**
      * Create a standardized error response
      *
-     * @param string $message Error message
-     * @param mixed $errors Additional error details or validation errors (optional)
-     * @param int $code HTTP status code (default: 400)
-     *
+     * @param  string  $message  Error message
+     * @param  mixed  $errors  Additional error details or validation errors (optional)
+     * @param  int  $code  HTTP status code (default: 400)
      * @return JsonResponse JSON response with error structure
      *
      * @example
@@ -75,9 +71,8 @@ class ResponseHelper
     /**
      * Create a standardized resource creation response
      *
-     * @param mixed $data The created resource data (optional) - typically an API Resource
-     * @param string $message Success message (default: 'Ressource créée avec succès')
-     *
+     * @param  mixed  $data  The created resource data (optional) - typically an API Resource
+     * @param  string  $message  Success message (default: 'Ressource créée avec succès')
      * @return JsonResponse JSON response with 201 status code
      *
      * @example
@@ -94,9 +89,8 @@ class ResponseHelper
     /**
      * Create a standardized resource update response
      *
-     * @param mixed $data The updated resource data (optional) - typically an API Resource
-     * @param string $message Success message (default: 'Ressource mise à jour avec succès')
-     *
+     * @param  mixed  $data  The updated resource data (optional) - typically an API Resource
+     * @param  string  $message  Success message (default: 'Ressource mise à jour avec succès')
      * @return JsonResponse JSON response with success structure
      *
      * @example
@@ -113,8 +107,7 @@ class ResponseHelper
     /**
      * Create a standardized resource deletion response
      *
-     * @param string $message Success message (default: 'Ressource supprimée avec succès')
-     *
+     * @param  string  $message  Success message (default: 'Ressource supprimée avec succès')
      * @return JsonResponse JSON response with success structure (no data)
      *
      * @example
@@ -129,8 +122,7 @@ class ResponseHelper
     /**
      * Create a standardized 404 Not Found response
      *
-     * @param string $message Error message (default: 'Ressource non trouvée')
-     *
+     * @param  string  $message  Error message (default: 'Ressource non trouvée')
      * @return JsonResponse JSON response with 404 status code
      *
      * @example
@@ -145,8 +137,7 @@ class ResponseHelper
     /**
      * Create a standardized 401 Unauthorized response
      *
-     * @param string $message Error message (default: 'Non autorisé')
-     *
+     * @param  string  $message  Error message (default: 'Non autorisé')
      * @return JsonResponse JSON response with 401 status code
      *
      * @example
@@ -161,8 +152,7 @@ class ResponseHelper
     /**
      * Create a standardized 403 Forbidden response
      *
-     * @param string $message Error message (default: 'Accès interdit')
-     *
+     * @param  string  $message  Error message (default: 'Accès interdit')
      * @return JsonResponse JSON response with 403 status code
      *
      * @example
@@ -177,9 +167,8 @@ class ResponseHelper
     /**
      * Create a standardized validation error response
      *
-     * @param mixed $errors Validation errors array or object
-     * @param string $message Error message (default: 'Erreur de validation')
-     *
+     * @param  mixed  $errors  Validation errors array or object
+     * @param  string  $message  Error message (default: 'Erreur de validation')
      * @return JsonResponse JSON response with 422 status code and validation errors
      *
      * @example
@@ -197,10 +186,9 @@ class ResponseHelper
      * Formats Laravel paginated data with optional resource transformation and includes
      * comprehensive pagination metadata in the response.
      *
-     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $paginatedData Laravel paginated data
-     * @param string|null $message Optional success message
-     * @param string|null $resourceClass Optional API resource class for data transformation
-     *
+     * @param  \Illuminate\Contracts\Pagination\LengthAwarePaginator  $paginatedData  Laravel paginated data
+     * @param  string|null  $message  Optional success message
+     * @param  string|null  $resourceClass  Optional API resource class for data transformation
      * @return JsonResponse JSON response with paginated data and metadata
      *
      * @example
@@ -220,7 +208,7 @@ class ResponseHelper
      * //   }
      * // }
      */
-    public static function paginated($paginatedData, string $message = null, ?string $resourceClass = null): JsonResponse
+    public static function paginated($paginatedData, ?string $message = null, ?string $resourceClass = null): JsonResponse
     {
         $response = [
             'success' => true,

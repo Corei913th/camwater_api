@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Enums\Role;
 use App\Models\Utilisateur;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\AbonneSeeder;
-use Database\Seeders\ReclamationSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -29,7 +26,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'operator@example.com',
             'role' => Role::OPERATEUR,
         ]);
-
 
         $this->call([
             AbonneSeeder::class,

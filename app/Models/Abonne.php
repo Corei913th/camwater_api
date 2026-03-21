@@ -12,7 +12,6 @@ class Abonne extends Model
 {
     use HasFactory, SoftDeletes;
 
-
     public static $snakeAttributes = false;
 
     protected $table = 'abonnes';
@@ -30,14 +29,10 @@ class Abonne extends Model
         'typeAbonnement' => TypeAbonnement::class,
     ];
 
-
-
     public function factures(): HasMany
     {
         return $this->hasMany(Facture::class, 'abonneId');
     }
-
-
 
     public function getNomCompletAttribute(): string
     {

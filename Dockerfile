@@ -1,7 +1,7 @@
 FROM php:8.2-fpm
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     libpng-dev \
@@ -35,6 +35,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 
 # Set permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Switch to non-root user
+USER www-data
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

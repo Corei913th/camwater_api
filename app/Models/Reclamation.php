@@ -10,30 +10,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reclamation extends Model
 {
-  use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
+    public static $snakeAttributes = false;
 
-  public static $snakeAttributes = false;
+    protected $table = 'reclamations';
 
-  protected $table = 'reclamations';
+    protected $fillable = [
+        'factureId',
+        'contenu',
+        'statut',
+        'reponse',
+        'dateReponse',
+    ];
 
-  protected $fillable = [
-    'factureId',
-    'contenu',
-    'statut',
-    'reponse',
-    'dateReponse',
-  ];
+    protected $casts = [
+        'statut' => StatutReclamation::class,
+        'dateReponse' => 'datetime',
+    ];
 
-  protected $casts = [
-    'statut'       => StatutReclamation::class,
-    'dateReponse' => 'datetime',
-  ];
-
-
-
-  public function facture(): BelongsTo
-  {
-    return $this->belongsTo(Facture::class, 'factureId');
-  }
+    public function facture(): BelongsTo
+    {
+        return $this->belongsTo(Facture::class, 'factureId');
+    }
 }

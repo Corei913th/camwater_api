@@ -7,7 +7,6 @@ enum TypeAbonnement: string
     case PROFESSIONNEL = 'PROFESSIONNEL';
     case DOMESTIQUE = 'DOMESTIQUE';
 
-
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
@@ -21,5 +20,3 @@ enum TypeAbonnement: string
         };
     }
 };
-
-

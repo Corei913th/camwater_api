@@ -12,13 +12,13 @@ return new class extends Migration
         Schema::create('factures', function (Blueprint $table) {
             $table->id();
             $table->foreignId('abonneId')
-                  ->constrained('abonnes')
-                  ->onDelete('cascade');
+                ->constrained('abonnes')
+                ->onDelete('cascade');
             $table->integer('montantTotal');
             $table->integer('consommation')->comment('En m³ ou kWh');
             $table->date('dateEmission');
             $table->enum('statut', StatutFacture::values())
-                  ->default(StatutFacture::EMISE);
+                ->default(StatutFacture::EMISE);
 
             $table->timestamps();
             $table->softDeletes();

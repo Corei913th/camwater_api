@@ -19,9 +19,9 @@ class ApiLoggingMiddleware
 
         \Illuminate\Support\Facades\Log::channel('api')->info('API Request', [
             'method' => $request->method(),
-            'url'    => $request->fullUrl(),
+            'url' => $request->fullUrl(),
             'status' => $response->getStatusCode(),
-            'ip'     => $request->ip(),
+            'ip' => $request->ip(),
         ]);
 
         return $response;

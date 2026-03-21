@@ -31,9 +31,6 @@ class ApiTest extends TestCase
         $this->token = $Utilisateur->currentAccessToken();
     }
 
-
-
-
     /**
      * Test getting abonnes list.
      */
@@ -41,14 +38,14 @@ class ApiTest extends TestCase
     {
         Abonne::factory()->count(3)->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->getJson('/api/abonnes');
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->getJson('/api/abonnes');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'success',
                 'message',
                 'data',
-                'meta' => ['current_page', 'last_page', 'per_page', 'total']
+                'meta' => ['current_page', 'last_page', 'per_page', 'total'],
             ]);
     }
 
@@ -62,11 +59,11 @@ class ApiTest extends TestCase
             'prenom' => 'John',
             'ville' => 'Yaoundé',
             'quartier' => 'Etoudi',
-            'numeroCompteur' => 'CPT' . rand(1000, 9999),
-            'typeAbonnement' => 'DOMESTIQUE'
+            'numeroCompteur' => 'CPT'.rand(1000, 9999),
+            'typeAbonnement' => 'DOMESTIQUE',
         ];
 
-        $response =  $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->postJson('/api/abonnes', $data);
+        $response = $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->postJson('/api/abonnes', $data);
 
         $response->assertStatus(201)
             ->assertJsonPath('data.nom', 'Doe');
@@ -81,8 +78,7 @@ class ApiTest extends TestCase
     {
         $abonne = Abonne::factory()->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->getJson("/api/abonnes/{$abonne->id}");
-
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->getJson("/api/abonnes/{$abonne->id}");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.id', $abonne->id);
@@ -96,7 +92,7 @@ class ApiTest extends TestCase
         $abonne = Abonne::factory()->create();
         $newData = ['nom' => 'UpdatedName'];
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->putJson("/api/abonnes/{$abonne->id}", $newData);
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->putJson("/api/abonnes/{$abonne->id}", $newData);
 
         $response->assertStatus(200)
             ->assertJsonPath('data.nom', 'UpdatedName');
@@ -109,7 +105,7 @@ class ApiTest extends TestCase
     {
         $abonne = Abonne::factory()->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->deleteJson("/api/abonnes/{$abonne->id}");
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->deleteJson("/api/abonnes/{$abonne->id}");
 
         $response->assertStatus(200);
         $this->assertSoftDeleted('abonnes', ['id' => $abonne->id]);
@@ -124,15 +120,14 @@ class ApiTest extends TestCase
     {
         Facture::factory()->count(2)->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->getJson('/api/factures');
-
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->getJson('/api/factures');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'success',
                 'message',
                 'data',
-                'meta' => ['current_page', 'last_page', 'per_page', 'total']
+                'meta' => ['current_page', 'last_page', 'per_page', 'total'],
             ]);
     }
 
@@ -145,12 +140,10 @@ class ApiTest extends TestCase
 
         $data = [
             'abonneId' => $abonne->id,
-            'consommation' => 100
+            'consommation' => 100,
         ];
 
-
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->postJson('/api/factures/generer', $data);
-
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->postJson('/api/factures/generer', $data);
 
         $response->assertStatus(201)
             ->assertJsonPath('success', true);
@@ -163,7 +156,7 @@ class ApiTest extends TestCase
     {
         $facture = Facture::factory()->create();
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $this->token)->getJson("/api/factures/{$facture->id}");
+        $response = $this->withHeader('Authorization', 'Bearer '.$this->token)->getJson("/api/factures/{$facture->id}");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.id', $facture->id);
