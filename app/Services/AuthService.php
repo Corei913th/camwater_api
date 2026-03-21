@@ -15,9 +15,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 class AuthService
 {
 
-    public function __construct(
-        private readonly UserService $userService,
-    ) {}
+    public function __construct() {}
 
     /**
      * Generate access and refresh tokens.

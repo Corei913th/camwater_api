@@ -27,9 +27,6 @@ class CalculateurFacture
     return match ($typeAbonnement) {
       TypeAbonnement::DOMESTIQUE    => self::tarifDomestique($consommation),
       TypeAbonnement::PROFESSIONNEL => self::tarifProfessionnel($consommation),
-      default                       => throw new InvalidArgumentException(
-        "Type d'abonnement inconnu : [{$typeAbonnement->value}]."
-      ),
     };
   }
 
