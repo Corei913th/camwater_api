@@ -18,9 +18,19 @@ spec:
       labels:
         app: camwater-app
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
       - name: app
         image: ${DOCKERHUB_USERNAME}/laravel-app:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
         ports:
         - containerPort: 9000
         resources:
@@ -33,18 +43,45 @@ spec:
         envFrom:
         - secretRef:
             name: camwater-secrets
+        volumeMounts:
+        - name: storage
+          mountPath: /var/www/storage
+        - name: cache
+          mountPath: /var/www/bootstrap/cache
+        - name: tmp
+          mountPath: /tmp
       - name: nginx
-        image: nginx:alpine
+        image: nginxinc/nginx-unprivileged:alpine
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/conf.d/default.conf
           subPath: default.conf
+        - name: nginx-tmp
+          mountPath: /tmp
+        - name: nginx-cache
+          mountPath: /var/cache/nginx
       volumes:
       - name: nginx-config
         configMap:
           name: nginx-config
+      - name: storage
+        emptyDir: {}
+      - name: cache
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: nginx-tmp
+        emptyDir: {}
+      - name: nginx-cache
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -55,6 +92,6 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 8080
   selector:
     app: camwater-app
