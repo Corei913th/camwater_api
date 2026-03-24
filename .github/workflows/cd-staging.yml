@@ -21,13 +21,4 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:develop,${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:${{ github.sha }}
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /apps/camwater-staging
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:develop
-            docker compose up -d
+
