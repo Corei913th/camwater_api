@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\MetricsController;
 use Illuminate\Support\Facades\Route;
+
+// Metrics for Prometheus (Internal)
+Route::get('/metrics', [MetricsController::class, 'index']);
 
 // 5 tentatives par minutes pour une adresse ip
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');

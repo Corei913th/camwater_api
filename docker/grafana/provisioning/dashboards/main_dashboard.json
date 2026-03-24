@@ -1,16 +1,5 @@
 {
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": "-- Grafana --",
-        "enable": true,
-        "hide": true,
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
-  },
+  "annotations": { "list": [] },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -21,101 +10,82 @@
     {
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "unit": "percentunit"
-        }
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "reqps" }
       },
-      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 0 },
       "id": 1,
-      "options": {
-        "legend": { "displayMode": "list", "placement": "bottom" },
-        "tooltip": { "mode": "single" }
-      },
+      "options": { "legend": { "displayMode": "list" } },
       "targets": [
-        {
-          "expr": "1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)",
-          "refId": "A"
-        }
+        { "expr": "rate(nginx_http_requests_total[5m])", "legendFormat": "Global Requests", "refId": "A" }
       ],
-      "title": "Memory Usage",
+      "title": "Nginx Request Rate",
       "type": "timeseries"
     },
     {
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "unit": "percent"
-        }
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
       },
-      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 0 },
       "id": 2,
-      "options": {
-        "legend": { "displayMode": "list", "placement": "bottom" }
-      },
+      "options": { "legend": { "displayMode": "list" } },
       "targets": [
-        {
-          "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)",
-          "refId": "A"
-        }
+        { "expr": "sum(nginx_http_requests_total) by (code)", "legendFormat": "HTTP {{code}}", "refId": "A" }
       ],
-      "title": "CPU Usage",
+      "title": "HTTP Status Codes",
       "type": "timeseries"
     },
     {
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "unit": "bps"
-        }
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "none" }
       },
-      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 6 },
       "id": 3,
-      "options": {
-        "legend": { "displayMode": "list", "placement": "bottom" }
-      },
+      "options": { "legend": { "displayMode": "list" } },
       "targets": [
-        {
-          "expr": "rate(node_network_receive_bytes_total[5m]) * 8",
-          "legendFormat": "Inbound",
-          "refId": "A"
-        },
-        {
-          "expr": "rate(node_network_transmit_bytes_total[5m]) * 8",
-          "legendFormat": "Outbound",
-          "refId": "B"
-        }
+        { "expr": "pg_stat_activity_count", "legendFormat": "Active Connections", "refId": "A" }
       ],
-      "title": "Network Traffic",
+      "title": "Postgres Active Connections",
       "type": "timeseries"
     },
     {
       "datasource": { "type": "prometheus", "uid": "Prometheus" },
       "fieldConfig": {
-        "defaults": { "unit": "s" }
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" }
       },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 6 },
       "id": 4,
+      "options": { "legend": { "displayMode": "list" } },
       "targets": [
-        {
-          "expr": "avg(container_cpu_usage_seconds_total{container_label_com_docker_compose_service='app'})",
-          "legendFormat": "App Latency (Estimate)",
-          "refId": "A"
-        }
+        { "expr": "rate(pg_stat_database_xact_commit[5m])", "legendFormat": "Commits", "refId": "A" },
+        { "expr": "rate(pg_stat_database_xact_rollback[5m])", "legendFormat": "Rollbacks", "refId": "B" }
       ],
-      "title": "Service Response Time & Error Rate",
+      "title": "Database Transaction Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "percentunit" }
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
+      "id": 5,
+      "targets": [
+        { "expr": "1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)", "legendFormat": "RAM", "refId": "A" },
+        { "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode='idle'}[5m])) * 100) / 100", "legendFormat": "CPU", "refId": "B" }
+      ],
+      "title": "Infra Global Health (CPU/RAM)",
       "type": "timeseries"
     }
   ],
   "refresh": "5s",
   "schemaVersion": 36,
   "style": "dark",
-  "tags": ["camwater", "infrastructure"],
+  "tags": ["camwater", "advanced", "full-stack"],
   "templating": { "list": [] },
   "time": { "from": "now-1h", "to": "now" },
-  "title": "CamwaterPRO Comprehensive Monitoring",
-  "uid": "camwater_monitoring",
-  "version": 2
+  "title": "CamwaterPRO Advanced Performance Dashboard",
+  "uid": "camwater_advanced",
+  "version": 3
 }

@@ -24,6 +24,15 @@ scrape_configs:
     static_configs:
       - targets: ['cadvisor:8080']
 
-  - job_name: 'laravel-app'
+  - job_name: 'nginx'
     static_configs:
-      - targets: ['camwater_app:9000']
+      - targets: ['nginx-exporter:9113']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+  - job_name: 'camwater-business'
+    metrics_path: '/api/metrics'
+    static_configs:
+      - targets: ['app:8000']
