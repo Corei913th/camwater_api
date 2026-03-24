@@ -38,7 +38,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
@@ -56,12 +56,28 @@ services:
     restart: unless-stopped
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       - camwater_network
     ports:
       - "9090:9090"
+    depends_on:
+      - alertmanager
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: camwater_alertmanager
+    restart: unless-stopped
+    volumes:
+      - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    networks:
+      - camwater_network
+    ports:
+      - "9093:9093"
 
   grafana:
     image: grafana/grafana:latest
@@ -86,7 +102,7 @@ services:
       - camwater_network
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    image: zcube/cadvisor:latest
     container_name: camwater_cadvisor
     restart: unless-stopped
     volumes:
@@ -99,7 +115,7 @@ services:
 
   # Logging (ELK Stack)
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    image: elastic/elasticsearch:7.17.10
     container_name: camwater_elasticsearch
     restart: unless-stopped
     environment:
@@ -115,7 +131,7 @@ services:
       - esdata:/usr/share/elasticsearch/data
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.17.10
+    image: elastic/logstash:7.17.10
     container_name: camwater_logstash
     restart: unless-stopped
     volumes:
@@ -126,7 +142,7 @@ services:
       - elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.10
+    image: elastic/kibana:7.17.10
     container_name: camwater_kibana
     restart: unless-stopped
     ports:
@@ -137,7 +153,7 @@ services:
       - elasticsearch
 
   filebeat:
-    image: docker.elastic.co/beats/filebeat:7.17.10
+    image: elastic/filebeat:7.17.10
     container_name: camwater_filebeat
     restart: unless-stopped
     user: root

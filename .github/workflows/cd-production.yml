@@ -1,0 +1,64 @@
+name: 🏆 CD - Production
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-push:
+    name: 🐳 Build and Push to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest,${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:${{ github.sha }}
+
+  deploy:
+    name: 🚀 Deploy to VPS (Port 443)
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Backup Database
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            docker exec camwater_db pg_dump -U postgres camwater > /backups/prod_$(date +%F).sql
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /apps/camwater-prod
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest
+            docker compose up -d
+            docker exec camwater_app php artisan migrate --force
+            docker exec camwater_app php artisan config:cache
+            docker exec camwater_app php artisan route:cache
+
+  performance:
+    name: 📊 k6 Load Test
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run k6
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/performance/load-test.js
+        env:
+          APP_URL: ${{ secrets.PROD_URL }}
