@@ -13,10 +13,10 @@ Route::post('/auth/login', [AuthController::class, 'login'])->middleware('thrott
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/auth/refresh', [AuthController::class, 'refresh']);
+});
 
-    // Resources protected by auth and general rate limit
-    Route::middleware('throttle:api')->group(function () {
-        require __DIR__.'/api/abonne.php';
-        require __DIR__.'/api/facture.php';
-    });
+// Resources protected by auth and general rate limit
+Route::middleware('throttle:api')->group(function () {
+    require __DIR__ . '/api/abonne.php';
+    require __DIR__ . '/api/facture.php';
 });
