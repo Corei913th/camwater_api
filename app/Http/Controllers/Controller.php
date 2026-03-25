@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
     contact: new OA\Contact(email: 'support@camwaterpro.com'),
     license: new OA\License(name: 'Apache 2.0', url: 'http://www.apache.org/licenses/LICENSE-2.0.html')
 )]
-#[OA\Server(url: 'http://localhost:8000', description: 'Serveur Local')]
+#[OA\Server(url: 'https://bogning.cdwfs.net', description: 'Serveur Local')]
 #[OA\SecurityScheme(
     securityScheme: 'bearerAuth',
     type: 'http',
