@@ -48,7 +48,7 @@ class AuthController extends Controller
         tags: ['Authentification'],
         summary: 'Se déconnecter',
         description: "Révoque le token d'accès actuel.",
-        security: [['sanctum' => []]],
+        security: [new OA\SecurityScheme(name: 'bearerAuth')],
         responses: [
             new OA\Response(response: 200, description: 'Déconnexion réussie'),
             new OA\Response(response: 401, description: 'Non authentifié'),
@@ -66,7 +66,7 @@ class AuthController extends Controller
         tags: ['Authentification'],
         summary: 'Rafraîchir les tokens',
         description: "Révoque tous les tokens actuels et en génère de nouveaux. Nécessite un token avec l'habileté 'refresh'.",
-        security: [['sanctum' => []]],
+        security: [new OA\SecurityScheme(name: 'bearerAuth')],
         responses: [
             new OA\Response(response: 200, description: 'Tokens rafraîchis'),
             new OA\Response(response: 401, description: 'Non authentifié ou token invalide'),

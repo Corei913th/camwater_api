@@ -16,13 +16,14 @@ class AbonneController extends Controller
 {
     public function __construct(private readonly AbonneService $abonneService) {}
 
-    #[OA\Get(path: '/api/abonnes', tags: ['Abonnes'], summary: 'Lister tous les abonnés')]
+    #[OA\Get(path: '/api/abonnes', tags: ['Abonnes'], summary: 'Lister tous les abonnés', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\Parameter(name: 'per_page', in: 'query', description: "Nombre d'éléments par page", schema: new OA\Schema(type: 'integer', default: 15))]
     #[OA\Parameter(name: 'ville', in: 'query', description: 'Filtrer par ville', schema: new OA\Schema(type: 'string'))]
     #[OA\Parameter(name: 'typeAbonnement', in: 'query', description: "Filtrer par type d'abonnement", schema: new OA\Schema(type: 'string'))]
     #[OA\Parameter(name: 'search', in: 'query', description: 'Recherche par nom ou prénom', schema: new OA\Schema(type: 'string'))]
     #[OA\Response(response: 200, description: 'Succès')]
     #[OA\Response(response: 500, description: 'Erreur serveur')]
+
     public function index(Request $request): JsonResponse
     {
         try {
@@ -37,7 +38,7 @@ class AbonneController extends Controller
         }
     }
 
-    #[OA\Post(path: '/api/abonnes', tags: ['Abonnes'], summary: 'Créer un nouvel abonné')]
+    #[OA\Post(path: '/api/abonnes', tags: ['Abonnes'], summary: 'Créer un nouvel abonné', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\RequestBody(
         required: true,
         content: new OA\JsonContent(
@@ -66,7 +67,7 @@ class AbonneController extends Controller
         }
     }
 
-    #[OA\Get(path: '/api/abonnes/{id}', tags: ['Abonnes'], summary: 'Afficher un abonné')]
+    #[OA\Get(path: '/api/abonnes/{id}', tags: ['Abonnes'], summary: 'Afficher un abonné', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\Parameter(name: 'id', in: 'path', description: "ID de l'abonné", required: true, schema: new OA\Schema(type: 'integer'))]
     #[OA\Response(response: 200, description: 'Succès')]
     #[OA\Response(response: 404, description: 'Abonné introuvable')]
@@ -81,7 +82,7 @@ class AbonneController extends Controller
         }
     }
 
-    #[OA\Put(path: '/api/abonnes/{id}', tags: ['Abonnes'], summary: 'Modifier un abonné')]
+    #[OA\Put(path: '/api/abonnes/{id}', tags: ['Abonnes'], summary: 'Modifier un abonné', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\Parameter(name: 'id', in: 'path', description: "ID de l'abonné", required: true, schema: new OA\Schema(type: 'integer'))]
     #[OA\RequestBody(
         required: true,
@@ -112,7 +113,7 @@ class AbonneController extends Controller
         }
     }
 
-    #[OA\Delete(path: '/api/abonnes/{id}', tags: ['Abonnes'], summary: 'Supprimer un abonné')]
+    #[OA\Delete(path: '/api/abonnes/{id}', tags: ['Abonnes'], summary: 'Supprimer un abonné', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\Parameter(name: 'id', in: 'path', description: "ID de l'abonné", required: true, schema: new OA\Schema(type: 'integer'))]
     #[OA\Response(response: 200, description: 'Succès')]
     #[OA\Response(response: 404, description: 'Abonné introuvable')]

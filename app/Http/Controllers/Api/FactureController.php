@@ -16,7 +16,7 @@ class FactureController extends Controller
 {
     public function __construct(private readonly FactureService $factureService) {}
 
-    #[OA\Get(path: '/api/factures', tags: ['Factures'], summary: 'Lister toutes les factures')]
+    #[OA\Get(path: '/api/factures', tags: ['Factures'], summary: 'Lister toutes les factures', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\Parameter(name: 'per_page', in: 'query', description: "Nombre d'éléments par page", schema: new OA\Schema(type: 'integer', default: 15))]
     #[OA\Parameter(name: 'abonneId', in: 'query', description: "Filtrer par ID d'abonné", schema: new OA\Schema(type: 'integer'))]
     #[OA\Parameter(name: 'statut', in: 'query', description: 'Filtrer par statut (Payé, Impayé, etc.)', schema: new OA\Schema(type: 'string'))]
@@ -37,7 +37,7 @@ class FactureController extends Controller
         }
     }
 
-    #[OA\Post(path: '/api/factures/generer', tags: ['Factures'], summary: 'Générer une facture pour un abonné')]
+    #[OA\Post(path: '/api/factures/generer', tags: ['Factures'], summary: 'Générer une facture pour un abonné', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\RequestBody(
         required: true,
         content: new OA\JsonContent(
@@ -67,7 +67,7 @@ class FactureController extends Controller
         }
     }
 
-    #[OA\Get(path: '/api/factures/{id}', tags: ['Factures'], summary: 'Consulter une facture')]
+    #[OA\Get(path: '/api/factures/{id}', tags: ['Factures'], summary: 'Consulter une facture', security: [new OA\SecurityScheme(name: 'bearerAuth')])]
     #[OA\Parameter(name: 'id', in: 'path', description: 'ID de la facture', required: true, schema: new OA\Schema(type: 'integer'))]
     #[OA\Response(response: 200, description: 'Succès')]
     #[OA\Response(response: 404, description: 'Facture introuvable')]

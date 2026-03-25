@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\Server(url: 'http://localhost:8000', description: 'Serveur Local')]
 #[OA\SecurityScheme(
-    securityScheme: 'sanctum',
+    securityScheme: 'bearerAuth',
     type: 'http',
     scheme: 'bearer',
     bearerFormat: 'JWT'
