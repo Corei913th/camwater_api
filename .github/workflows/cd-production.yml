@@ -1,25 +1,57 @@
-name: 🏆 CD - Production
+name: Deploy
 
 on:
+  workflow_run:
+    workflows: [ "🏗️ CI - Validation" ]
+    types:
+      - completed
+    branches:
+      - main
   push:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build-push:
-    name: 🐳 Build and Push to Docker Hub
+
+  check-ci:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') || 
+      github.event_name == 'push'
+    steps:
+      - name: 🔍 CI Validation
+        run: echo "CI validated or manual push. Proceeding to deploy..."
+
+  deploy:
+    name: "🚀 Deploy to O2Switch"
+    needs: [ check-ci ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest,${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:${{ github.sha }}
 
+      - name: "📝 Préparation du .env et du Flag"
+        run: |
+          printf '%s' "${{ secrets.PROD_ENV_FILE }}" > .env
+          grep -q "^APP_KEY=" .env || echo "APP_KEY=" >> .env
+          NEW_KEY=$(php -r "echo 'base64:'.base64_encode(random_bytes(32));")
+          sed -i 's|^APP_KEY=.*|APP_KEY='${NEW_KEY}'|' .env
+          echo "deploy" > deploy.flag
+
+      - name: "📤 Déploiement Backend via FTP"
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: bogning/api/
+          exclude: |
+            **/vendor/**
+            **/.git*
+            **/node_modules/**
+            **/tests/**
+            **/k8s/**
+            **/docker/**
+
+      - name: "✅ Terminé"
+        run: echo "Déploiement terminé via FTP dans le dossier bogning/api/"

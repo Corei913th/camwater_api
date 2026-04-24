@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: 🚀 Deploy to VPS (Port 3001)
+    name: 🚀 Deploy to DOCKER HUB
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,5 +20,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:develop,${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:${{ github.sha }}
-
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:develop,${{
+            secrets.DOCKERHUB_USERNAME }}/laravel-app:${{ github.sha }}
