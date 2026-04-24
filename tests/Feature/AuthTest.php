@@ -63,7 +63,7 @@ class AuthTest extends TestCase
         $Utilisateur = Utilisateur::factory()->create();
         $token = $Utilisateur->createToken('test')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->postJson('/api/auth/logout');
 
         $response->assertStatus(200);
@@ -79,7 +79,7 @@ class AuthTest extends TestCase
         // Create a refresh token
         $refreshToken = $Utilisateur->createToken('refresh', [TokenConstants::ABILITY_REFRESH])->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $refreshToken)
+        $response = $this->withHeader('Authorization', 'Bearer '.$refreshToken)
             ->postJson('/api/auth/refresh');
 
         $response->assertStatus(200)
@@ -102,7 +102,7 @@ class AuthTest extends TestCase
         $Utilisateur = Utilisateur::factory()->create();
         $accessToken = $Utilisateur->createToken('access', [TokenConstants::ABILITY_ALL])->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $accessToken)
+        $response = $this->withHeader('Authorization', 'Bearer '.$accessToken)
             ->postJson('/api/auth/refresh');
 
         $response->assertStatus(200);

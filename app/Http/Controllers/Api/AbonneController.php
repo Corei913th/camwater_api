@@ -23,7 +23,6 @@ class AbonneController extends Controller
     #[OA\Parameter(name: 'search', in: 'query', description: 'Recherche par nom ou prénom', schema: new OA\Schema(type: 'string'))]
     #[OA\Response(response: 200, description: 'Succès')]
     #[OA\Response(response: 500, description: 'Erreur serveur')]
-
     public function index(Request $request): JsonResponse
     {
         try {

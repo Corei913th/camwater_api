@@ -17,6 +17,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Resources protected by auth and general rate limit
 Route::middleware('throttle:api')->group(function () {
-    require __DIR__ . '/api/abonne.php';
-    require __DIR__ . '/api/facture.php';
+    require __DIR__.'/api/abonne.php';
+    require __DIR__.'/api/facture.php';
 });
