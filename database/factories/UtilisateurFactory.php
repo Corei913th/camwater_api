@@ -25,7 +25,7 @@ class UtilisateurFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => fake()->unique()->safeEmail(),
+            'email' => $this->faker->unique()->safeEmail(),
             'role' => $this->faker->randomElement(Role::values()),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
