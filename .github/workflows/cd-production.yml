@@ -7,19 +7,15 @@ on:
       - completed
     branches:
       - main
-  push:
-    branches: [ main ]
 
 jobs:
 
   check-ci:
     runs-on: ubuntu-latest
-    if: |
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') || 
-      github.event_name == 'push'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: 🔍 CI Validation
-        run: echo "CI validated or manual push. Proceeding to deploy..."
+        run: echo "CI validated. Proceeding to deploy..."
 
   deploy:
     name: "🚀 Deploy to O2Switch"
@@ -44,7 +40,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: bogning/api/
+          server-dir: api/
           exclude: |
             **/vendor/**
             **/.git*
@@ -54,4 +50,4 @@ jobs:
             **/docker/**
 
       - name: "✅ Terminé"
-        run: echo "Déploiement terminé via FTP dans le dossier bogning/api/"
+        run: echo "Déploiement terminé via FTP dans le dossier api/"
