@@ -15,14 +15,14 @@ class FactureFactory extends Factory
     public function definition(): array
     {
         $abonne = Abonne::inRandomOrder()->first() ?? Abonne::factory()->create();
-        $consommation = fake()->numberBetween(1, 80);
+        $consommation = $this->faker->numberBetween(1, 80);
         $montantTotal = (new CalculateurFacture)->calculerMontant($consommation, $abonne->typeAbonnement);
 
         return [
             'abonneId' => $abonne->id,
             'consommation' => $consommation,
-            'dateEmission' => fake()->dateTimeBetween('-6 months', 'now')->format('Y-m-d'),
-            'statut' => fake()->randomElement(StatutFacture::values()),
+            'dateEmission' => $this->faker->dateTimeBetween('-6 months', 'now')->format('Y-m-d'),
+            'statut' => $this->faker->randomElement(StatutFacture::values()),
             'montantTotal' => $montantTotal,
         ];
     }

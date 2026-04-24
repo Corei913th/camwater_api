@@ -15,15 +15,15 @@ class ReclamationFactory extends Factory
     {
         $facture = Facture::inRandomOrder()->first() ?? Facture::factory()->create();
 
-        $statut = fake()->randomElement(StatutReclamation::values());
+        $statut = $this->faker->randomElement(StatutReclamation::values());
         $hasResponse = in_array($statut, [StatutReclamation::APPROUVEE->value, StatutReclamation::REJETTEE->value], true);
 
         return [
             'factureId' => $facture->id,
-            'contenu' => fake()->paragraph(2),
+            'contenu' => $this->faker->paragraph(2),
             'statut' => $statut,
-            'reponse' => $hasResponse ? fake()->sentence() : null,
-            'dateReponse' => $hasResponse ? fake()->dateTimeBetween('-30 days', 'now') : null,
+            'reponse' => $hasResponse ? $this->faker->sentence() : null,
+            'dateReponse' => $hasResponse ? $this->faker->dateTimeBetween('-30 days', 'now') : null,
         ];
     }
 }

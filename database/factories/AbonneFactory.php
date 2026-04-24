@@ -13,12 +13,12 @@ class AbonneFactory extends Factory
     public function definition(): array
     {
         return [
-            'nom' => fake()->lastName(),
-            'prenom' => fake()->firstName(),
-            'quartier' => fake()->streetName(),
-            'ville' => fake()->city(),
-            'numeroCompteur' => fake()->unique()->numerify('CPT####'),
-            'typeAbonnement' => fake()->randomElement(TypeAbonnement::values()),
+            'nom' => $this->faker->lastName(),
+            'prenom' => $this->faker->firstName(),
+            'quartier' => $this->faker->streetName(),
+            'ville' => $this->faker->city(),
+            'numeroCompteur' => $this->faker->unique()->numerify('CPT####'),
+            'typeAbonnement' => $this->faker->randomElement(TypeAbonnement::values()),
         ];
     }
 }
