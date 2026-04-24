@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Abonne\StoreAbonneRequest;
+use App\Http\Requests\Facture\GenererFactureRequest;
 use App\Http\Requests\Web\LoginRequest;
 use App\Models\Abonne;
 use App\Models\Facture;
