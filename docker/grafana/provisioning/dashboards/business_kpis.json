@@ -8,51 +8,51 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": { "color": { "mode": "palette-classic" }, "unit": "none" }
       },
       "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
       "id": 1,
-      "targets": [{ "expr": "camwater_invoices_total", "refId": "A" }],
-      "title": "Total Factures",
+      "targets": [{ "expr": "camwater_factures_count", "legendFormat": "{{status}}", "refId": "A" }],
+      "title": "Nombre de Factures",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": { "color": { "mode": "palette-classic" }, "unit": "currencyXAF" }
       },
       "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 },
       "id": 2,
-      "targets": [{ "expr": "camwater_revenue_total", "refId": "A" }],
-      "title": "Revenu Total",
+      "targets": [{ "expr": "camwater_revenue_total", "legendFormat": "{{status}}", "refId": "A" }],
+      "title": "Revenu",
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
       },
       "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 },
       "id": 3,
-      "targets": [{ "expr": "camwater_active_subscribers", "refId": "A" }],
-      "title": "Abonnés Actifs",
+      "targets": [{ "expr": "camwater_abonnes_total", "refId": "A" }],
+      "title": "Abonnés",
       "type": "gauge"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": { "color": { "mode": "palette-classic" }, "unit": "none" }
       },
       "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 },
       "id": 4,
-      "targets": [{ "expr": "camwater_complaints_pending", "refId": "A" }],
-      "title": "Réclamations en attente",
+      "targets": [{ "expr": "camwater_reclamations_status", "legendFormat": "{{status}}", "refId": "A" }],
+      "title": "Réclamations",
       "type": "stat"
     }
   ],
-  "refresh": "1m",
+  "refresh": "5s",
   "schemaVersion": 36,
   "style": "dark",
   "tags": ["camwater", "business", "kpi"],
@@ -60,5 +60,5 @@
   "time": { "from": "now-24h", "to": "now" },
   "title": "CamwaterPRO Business KPIs",
   "uid": "camwater_business",
-  "version": 2
+  "version": 10
 }

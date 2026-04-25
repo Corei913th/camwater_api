@@ -6,6 +6,14 @@ use Illuminate\Support\Facades\Route;
 
 // Metrics for Prometheus (Internal)
 Route::get('/metrics', [MetricsController::class, 'index']);
+Route::get('/health', function () {
+    try {
+        \DB::connection()->getPdo();
+        return response()->json(['status' => 'ok', 'database' => 'connected']);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'database' => 'disconnected'], 500);
+    }
+});
 
 // 5 tentatives par minutes pour une adresse ip
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');

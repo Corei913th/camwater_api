@@ -14,6 +14,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
 
   nginx:
     image: nginx:alpine
@@ -179,6 +185,7 @@ services:
     container_name: camwater_filebeat
     restart: unless-stopped
     user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
     volumes:
       - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro

@@ -1,29 +1,42 @@
 groups:
   - name: camwater_alerts
     rules:
-      - alert: InstanceDown
-        expr: up == 0
+      # 1. Alerte si le taux d'erreur 5xx dépasse 5%
+      - alert: HighErrorRate
+        expr: (sum(rate(nginx_http_requests_total{status=~"5.."}[5m])) / sum(rate(nginx_http_requests_total[5m]))) * 100 > 5
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Taux d'erreur élevé sur CamwaterPRO"
+          description: "Le taux d'erreur 5xx est de {{ $value | printf \"%.2f\" }}% depuis plus de 2 minutes."
+
+      # 2. Alerte si la base de données est injoignable
+      - alert: DatabaseDown
+        expr: pg_up == 0
         for: 1m
         labels:
           severity: critical
         annotations:
-          summary: "Instance {{ $labels.instance }} down"
-          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
+          summary: "Base de données Camwater DOWN"
+          description: "L'instance PostgreSQL est injoignable pour le service monitoring."
 
-      - alert: HighCpuUsage
-        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
-        for: 2m
+      # 3. Alerte si le service App (Laravel) ne répond plus
+      - alert: AppServiceDown
+        expr: up{job="camwater-business"} == 0
+        for: 1m
         labels:
-          severity: warning
+          severity: critical
         annotations:
-          summary: "High CPU usage on {{ $labels.instance }}"
-          description: "CPU usage is above 80% for more than 2 minutes."
+          summary: "API CamwaterPRO DOWN"
+          description: "Le service Laravel (app) ne répond plus aux requêtes de métriques."
 
+      # 4. Alerte si la RAM est saturée (> 90%)
       - alert: HighMemoryUsage
-        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 90
-        for: 2m
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
         labels:
           severity: warning
         annotations:
-          summary: "High Memory usage on {{ $labels.instance }}"
-          description: "Memory usage is above 90% for more than 2 minutes."
+          summary: "Mémoire saturée sur le serveur"
+          description: "L'utilisation de la RAM est de {{ $value | printf \"%.2f\" }}%."
