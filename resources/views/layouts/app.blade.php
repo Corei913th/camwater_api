@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --primary: #2563eb;
+            --primary: #25eb35ff;
             --primary-dark: #1d4ed8;
             --secondary: #64748b;
             --success: #10b981;

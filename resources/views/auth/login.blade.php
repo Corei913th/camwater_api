@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --primary: #2563eb;
+            --primary: #25eb35ff;
             --primary-dark: #1d4ed8;
             --background: #f8fafc;
             --text-main: #1e293b;
