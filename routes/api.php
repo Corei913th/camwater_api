@@ -9,6 +9,7 @@ Route::get('/metrics', [MetricsController::class, 'index']);
 Route::get('/health', function () {
     try {
         \DB::connection()->getPdo();
+
         return response()->json(['status' => 'ok', 'database' => 'connected']);
     } catch (\Exception $e) {
         return response()->json(['status' => 'error', 'database' => 'disconnected'], 500);

@@ -20,7 +20,7 @@ class MonitorResponseTime
         // On garde les 100 dernières durées par exemple
         $durations = Cache::get('app_request_durations', []);
         $durations[] = $duration;
-        
+
         if (count($durations) > 100) {
             array_shift($durations);
         }
